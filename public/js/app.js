@@ -76693,27 +76693,28 @@ function (_Component) {
               case 4:
                 _ref = _context.sent;
                 data = _ref.data;
-                console.log(data);
-                successCallback(); //data contains currentUser and token
+                console.log(data); //data contains currentUser and token
 
                 this.setState(_objectSpread({
                   isLoggedIn: true
-                }, data));
-                _context.next = 15;
+                }, data), function () {
+                  successCallback();
+                });
+                _context.next = 14;
                 break;
 
-              case 11:
-                _context.prev = 11;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](1);
                 console.log(_context.t0.response.data);
                 errorCallback(_context.t0.response.data.errors);
 
-              case 15:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 11]]);
+        }, _callee, this, [[1, 10]]);
       }));
 
       function registrationSubmit(_x, _x2, _x3) {

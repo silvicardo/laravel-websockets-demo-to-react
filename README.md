@@ -1,8 +1,11 @@
-# Laravel WebSockets Demo 🛰
+# Laravel WebSockets Demo To React 🛰
 
-This is a demo application built with the [Laravel WebSockets](https://github.com/beyondcode/laravel-websockets) package.
+React implementation of the official [Laravel WebSockets Demo](https://github.com/beyondcode/laravel-websockets-demo)
 
-Be sure to check out the [official documentation](https://docs.beyondco.de/laravel-websockets/).
+
+Check out the [Laravel WebSockets](https://github.com/beyondcode/laravel-websockets) package!
+
+Also look out for the [official documentation](https://docs.beyondco.de/laravel-websockets/).
 
 ## Usage
 
@@ -10,8 +13,12 @@ Be sure to check out the [official documentation](https://docs.beyondco.de/larav
 2. `composer install`
 3. `cp .env.example .env`
 4. `php artisan migrate`
-5. `php artisan key:generate`
-6. `php artisan websockets:serve`
+5. `npm install`
+6. `php artisan key:generate`
+7. `php artisan websockets:serve`
+8. `Open two different browsers and test the app registering with different accounts`
+
+
 
 ## Credits
 

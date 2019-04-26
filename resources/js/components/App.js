@@ -55,10 +55,10 @@ export default class App extends Component {
 
       console.log(data);
 
-      successCallback();
-
       //data contains currentUser and token
-      this.setState({ isLoggedIn: true, ...data });
+      this.setState({ isLoggedIn: true, ...data }, () =>{
+        successCallback();
+      });
 
     } catch(error){
 
