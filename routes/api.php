@@ -13,6 +13,22 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('json.response')->group(function () {
+
+    // public routes
+    //->login - POST
+    Route::post('/login', 'Api\AuthController@login')->name('login.api');
+    //->register - POST
+    Route::post('/register', 'Api\AuthController@register')->name('register.api');
+
+});
+
+// private routes
+
+Route::middleware(['auth:api','json.response'])->group(function () {
+
+  //->user - GET
+  Route::get('/user','Api\UserController@show')->name('user.show');
+  //->logout - GET
+  Route::get('/logout', 'Api\AuthController@logout')->name('logout');
 });
