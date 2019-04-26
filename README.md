@@ -14,17 +14,17 @@ Also look out for the [official documentation](https://docs.beyondco.de/laravel-
 3. `cp .env.example .env`
 4. `php artisan migrate`
 5. `npm install`
-6. `php artisan key:generate`
-7. `php artisan websockets:serve`
-8. `Open two different browsers and test the app registering with different accounts`
-
-
+6. `npm run dev`
+7. `php artisan key:generate`
+8. `php artisan websockets:serve`
+9. `Open two different browsers and test the app registering with different accounts`
 
 ## Credits
 
 - [Marcel Pociot](https://github.com/mpociot)
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
+- [Bitfumes - Laravel WebSockets guide] (https://www.youtube.com/watch?v=mDnsC-sfG7I&t=626s)
 
 ## License
 
