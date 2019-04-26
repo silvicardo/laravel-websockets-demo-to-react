@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 //withRouter gives us the ability to navigate
 //even if the component is not within a Route
 import { NavLink, withRouter } from 'react-router-dom';
+import Echo from 'laravel-echo';
 
 class Navbar extends Component {
 
@@ -14,6 +15,10 @@ class Navbar extends Component {
 
   backToTheHomePage(){
 
+    //leave the chat if an Echo instance is available
+    window.Echo && window.Echo.leave('chat') || null;
+
+    //and back to Homepage
     this.props.history.push('/');
   }
 

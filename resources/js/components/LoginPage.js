@@ -29,7 +29,7 @@ handleChange(e) {
 reachTheDashboard(){
 
   this.props.history.push('/dashboard');
-  
+
 }
 
 manageLoginErrors(error) {

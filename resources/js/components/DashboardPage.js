@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import Chat from './Chat';
 
 const DashboardPage = (props) => (
       <Fragment>
@@ -7,6 +8,7 @@ const DashboardPage = (props) => (
         </div>
         <p>Enjoy your stay</p>
         <button className="btn btn-secondary btn-lg" onClick={()=> {props.history.push('/')}}>Go Back to the Homepage </button>
+        <Chat currentUser={props.user} token={props.token} />
       </Fragment>
     )
 

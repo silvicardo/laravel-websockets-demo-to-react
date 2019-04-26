@@ -10,12 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Auth::routes();
 
 //React WildCard Route
 Route::view('/{path?}', 'layouts.app');
 
-// Auth::routes();
+
 //
 // Route::get('/', 'ChatsController@index');
 // Route::get('messages', 'ChatsController@fetchMessages');

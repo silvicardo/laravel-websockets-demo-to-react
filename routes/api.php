@@ -29,6 +29,10 @@ Route::middleware(['auth:api','json.response'])->group(function () {
 
   //->user - GET
   // Route::get('/user','Api\UserController@show')->name('user.show');
+  //->messages - GET
+  Route::get('/messages','Api\MessagesController@fetchMessages')->name('messages.fetch');
+  //-> NEW message - POST
+  Route::post('/messages/new','Api\MessagesController@store')->name('messages.store');
   //->logout - GET
   Route::get('/logout', 'Api\AuthController@logout')->name('logout');
 });

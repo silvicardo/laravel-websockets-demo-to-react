@@ -30,7 +30,7 @@ export default class App extends Component {
     //This is the Highest level state
 
     this.state = {
-      appName: 'Laravel-Passport+React',
+      appName: 'Laravel-Passport-Websocket+React',
       isLoggedIn: false,
       currentUser: {},
       token: null,
@@ -102,9 +102,11 @@ export default class App extends Component {
 
       console.log('login response.data ', data);
 
-      successCallback();
 
-      this.setState({ isLoggedIn: true, ...data });
+
+      this.setState({ isLoggedIn: true, ...data }, () =>{
+        successCallback();
+      });
 
     } catch(error) {
 
@@ -156,7 +158,7 @@ export default class App extends Component {
           {/* DashboardPage receives props to manage routing + the currentUser from the state */}
           <Route
           exact path="/dashboard"
-          render={(props) => (<DashboardPage {...props} user={this.state.currentUser} />)}
+          render={(props) => (<DashboardPage {...props} user={this.state.currentUser} token={this.state.token} />)}
           />
         </Switch>
         </div>
