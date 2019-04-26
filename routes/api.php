@@ -28,7 +28,7 @@ Route::middleware('json.response')->group(function () {
 Route::middleware(['auth:api','json.response'])->group(function () {
 
   //->user - GET
-  Route::get('/user','Api\UserController@show')->name('user.show');
+  // Route::get('/user','Api\UserController@show')->name('user.show');
   //->logout - GET
   Route::get('/logout', 'Api\AuthController@logout')->name('logout');
 });
