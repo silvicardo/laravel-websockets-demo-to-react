@@ -24,7 +24,7 @@ Also look out for the [official documentation](https://docs.beyondco.de/laravel-
 - [Marcel Pociot](https://github.com/mpociot)
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
-- [Bitfumes - Laravel WebSockets guide] (https://www.youtube.com/watch?v=mDnsC-sfG7I&t=626s)
+- [Bitfumes - Laravel WebSockets guide](https://www.youtube.com/watch?v=mDnsC-sfG7I&t=626s)
 
 ## License
 
