@@ -8,38 +8,108 @@ import Echo from 'laravel-echo';
 class Chat extends Component {
 
   constructor(props){
+
     super(props);
 
-    this.state = {
-      messages: [],
-      users: [],
-    }
+    this.state = { messages: [], users: [] };
 
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
+
   }
 
-  //placeholder
-    onMessageSubmit(newMessage){
+  onMessageSubmit(newMessage){
 
-    let newMsgData = { message: newMessage, user: this.props.currentUser }
+    let newMsgData = { message: newMessage, user: this.props.currentUser };
 
     axios(axiosHelper.storeNewMessageConfig(this.props.token, newMsgData))
-    .then(response => {
+    .then(response => { console.log('message succesfully stored', response.data) })
+    .catch(error => { console.log('issues storing message', error.response.data) });
 
-      //handle user message submit
-      this.setState({messages: response.data.messages})
-    })
-    .catch(error => {
-      console.log(error.response.data)
+  }
+
+  setUsersInLobby(users){
+
+    console.log('here there are', users);
+
+    this.setState((prevState) => {
+        return { users: [...prevState.users,...users]}
+    });
+
+  }
+
+  newUserDidJoin(user){
+
+    console.log('new join', user);
+    this.setState((prevState) => ({ users: [ ...prevState.users, user ] }));
+
+  }
+
+  userDidLeave(user){
+
+    console.log('i am leaving... ', user);
+
+    //to avoid problems change the state only if this is not you
+    if (user.id !== this.props.currentUser.id){
+
+      this.setState((prevState) => ({ users: prevState.users.filter(u => u.id !== user.id)}));
+
+    }
+
+  }
+
+  userDidType(user){
+
+    const {id, name} = user;
+
+    console.log(name + ' typed ');
+
+    this.setState((prevState) => {
+
+      prevState.users.forEach((user, index) => {
+          if (user.id === id) {
+              user.typing = true;
+          }
+      });
+      // console.log(prevState.users);
+
+      return { users: prevState.users }
+
     })
 
+  }
+
+  messageWasSent(event) {
+
+    this.setState((prevState) => {
+
+      let newMessage = {
+          message: event.message.message,
+          user: event.user
+      };
+
+      prevState.users.forEach((user, index) => {
+          if (user.id === event.user.id) {
+              user.typing = false;
+          }
+      });
+
+      var newState = {
+          messages: [...prevState.messages, newMessage],
+          users: prevState.users
+        };
+
+      console.log('state after message submit', newState);
+
+      return newState;
+
+    });
 
   }
 
   async componentDidMount(){
 
-    // console.log('da dashboard currentUser ', this.props.currentUser)
-    // console.log('da dashboard token ', this.props.token)
+    //User joins chat lobby and listens to events
+
     window.Echo = new Echo({
         broadcaster: 'pusher',
         key: process.env.MIX_PUSHER_APP_KEY,
@@ -52,86 +122,29 @@ class Chat extends Component {
     });
 
     window.Echo.join('chat')
-        .here(users => {
-            console.log('here there are', users);
-            this.setState((prevState) => {
-                return { users: [...prevState.users,...users]}
-            });
-        })
-        .joining(user => {
-            console.log('new join', user);
-            this.setState((prevState) => ({ users: [ ...prevState.users, user ] }));
-        })
-        .leaving(user => {
-            console.log('i am leaving... ', user);
-            //to avoid problems change the state only if this is not you
-            if (user.id !== this.props.currentUser.id){
-              this.setState((prevState) => ({
-                users: prevState.users.filter(u => u.id !== user.id)
-              }))
-            }
+      .here(this.setUsersInLobby)
+      .joining(this.newUserDidJoin)
+      .leaving(this.userDidLeave)
+      .listenForWhisper('typing', this.userDidType)
+      .listen('MessageSent', this.messageWasSent);
 
+    console.log('echo operations ok');
 
-        })
-        .listenForWhisper('typing', ({id, name}) => {
-            console.log(name + ' typed ');
-
-            this.setState((prevState) => {
-
-              prevState.users.forEach((user, index) => {
-                  if (user.id === id) {
-                      user.typing = true;
-                  }
-              });
-              // console.log(prevState.users);
-
-              return { users: prevState.users }
-
-        })
-      })
-        .listen('MessageSent', (event) => {
-
-
-            this.setState((prevState) => {
-
-              let newMessage = {
-                  message: event.message.message,
-                  user: event.user
-              }
-
-              prevState.users.forEach((user, index) => {
-                  if (user.id === event.user.id) {
-                      user.typing = false;
-
-                  }
-              });
-
-              var newState = { messages: [...prevState.messages, newMessage],
-                        users: prevState.users }
-
-              console.log('state after message submit', newState);
-
-
-              return newState;
-            })
-
-        });
-
-
-    console.log('echo actions ok');
+    //Download messages and update state
 
     try {
-    const {data}  = await axios(axiosHelper.getMessagesConfig(this.props.token));
 
-    console.log('done getMessages call',data );
+      const {data}  = await axios(axiosHelper.getMessagesConfig(this.props.token));
 
-    this.setState({ messages: data.messages})
+      console.log('done getMessages call', data );
 
+      this.setState({ messages: data.messages});
 
-  } catch(error){
+    } catch(error){
 
-    console.log(error.response.data)
-  }
+        console.log(error.response.data);
+
+    }
 
 }
 
@@ -163,7 +176,9 @@ class Chat extends Component {
           </div>
       </div>
     );
+
   }
+
 }
 
 export default Chat;

@@ -10,6 +10,6 @@ const DashboardPage = (props) => (
         <button className="btn btn-secondary btn-lg" onClick={()=> {props.history.push('/')}}>Go Back to the Homepage </button>
         <Chat currentUser={props.user} token={props.token} />
       </Fragment>
-    )
+    );
 
 export default DashboardPage;

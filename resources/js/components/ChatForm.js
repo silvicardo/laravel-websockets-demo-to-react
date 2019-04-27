@@ -3,28 +3,30 @@ import React, { Component } from 'react';
 class ChatForm extends Component {
 
   constructor(props){
+
     super(props);
 
-    this.state = {
-      newMessage: '',
-
-    };
+    this.state = { newMessage: '' };
 
     this.onNewMessageSubmit = this.onNewMessageSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+
   }
 
   onNewMessageSubmit(e){
+
     e.preventDefault();
 
     this.props.onMessageSent(this.state.newMessage);
 
-    this.setState({newMessage: ''})
+    this.setState({newMessage: ''});
 
   }
 
   handleChange(e) {
-    console.log('type event!', this.props.currentUser)
+
+    console.log('type event!', this.props.currentUser);
+
     //Send
     Echo.join('chat').whisper('typing', this.props.currentUser);
 
@@ -33,6 +35,7 @@ class ChatForm extends Component {
   }
 
   render() {
+
     return (
       <form onSubmit={this.onNewMessageSubmit}>
       <div className="input-group">
@@ -55,7 +58,9 @@ class ChatForm extends Component {
       </div>
     </form>
     );
+
   }
+
 }
 
 export default ChatForm;
