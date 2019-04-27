@@ -14,6 +14,11 @@ class Chat extends Component {
     this.state = { messages: [], users: [] };
 
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
+    this.setUsersInLobby = this.setUsersInLobby.bind(this);
+    this.newUserDidJoin = this.newUserDidJoin.bind(this);
+    this.userDidLeave = this.userDidLeave.bind(this);
+    this.userDidType = this.userDidType.bind(this);
+    this.messageWasSent = this.messageWasSent.bind(this);
 
   }
 

@@ -1,65 +1,52 @@
-import React, { Component } from 'react';
+//Refactored to use Hooks
+import React, { useState } from 'react';
 
-class ChatForm extends Component {
+const ChatForm = (props) => {
 
-  constructor(props){
+  const [newMessage, setNewMessage] = useState('');
 
-    super(props);
-
-    this.state = { newMessage: '' };
-
-    this.onNewMessageSubmit = this.onNewMessageSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-
-  }
-
-  onNewMessageSubmit(e){
+  const onNewMessageSubmit = (e) => {
 
     e.preventDefault();
 
-    this.props.onMessageSent(this.state.newMessage);
+    props.onMessageSent(setNewMessage);
 
-    this.setState({newMessage: ''});
-
-  }
-
-  handleChange(e) {
-
-    console.log('type event!', this.props.currentUser);
-
-    //Send
-    Echo.join('chat').whisper('typing', this.props.currentUser);
-
-    this.setState({[e.target.name] : e.target.value });
+    setNewMessage('');
 
   }
 
-  render() {
+  const handleChange = (e) => {
 
-    return (
-      <form onSubmit={this.onNewMessageSubmit}>
-      <div className="input-group">
-          <input
-            id="btn-input"
-            type="text"
-            name="newMessage"
-            className="form-control input-sm"
-            placeholder="Type your message here..."
-            value={this.state.newMessage}
-            onChange={this.handleChange}
-          />
-          <span className="input-group-btn">
-              <button
-              className="btn btn-primary btn-sm"
-              id="btn-chat">
-                Send
-              </button>
-          </span>
-      </div>
-    </form>
-    );
+    // console.log('type event!', props.currentUser);
+    
+    Echo.join('chat').whisper('typing', props.currentUser);
+
+    setNewMessage(e.target.value);
 
   }
+
+  return (
+    <form onSubmit={onNewMessageSubmit}>
+    <div className="input-group">
+        <input
+          id="btn-input"
+          type="text"
+          name="newMessage"
+          className="form-control input-sm"
+          placeholder="Type your message here..."
+          value={newMessage}
+          onChange={handleChange}
+        />
+        <span className="input-group-btn">
+            <button
+            className="btn btn-primary btn-sm"
+            id="btn-chat">
+              Send
+            </button>
+        </span>
+    </div>
+  </form>
+  );
 
 }
 

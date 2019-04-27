@@ -76918,6 +76918,10 @@ __webpack_require__.r(__webpack_exports__);
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -76925,10 +76929,6 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -76969,26 +76969,99 @@ function (_Component) {
       users: []
     };
     _this.onMessageSubmit = _this.onMessageSubmit.bind(_assertThisInitialized(_this));
+    _this.setUsersInLobby = _this.setUsersInLobby.bind(_assertThisInitialized(_this));
+    _this.newUserDidJoin = _this.newUserDidJoin.bind(_assertThisInitialized(_this));
+    _this.userDidLeave = _this.userDidLeave.bind(_assertThisInitialized(_this));
+    _this.userDidType = _this.userDidType.bind(_assertThisInitialized(_this));
+    _this.messageWasSent = _this.messageWasSent.bind(_assertThisInitialized(_this));
     return _this;
-  } //placeholder
-
+  }
 
   _createClass(Chat, [{
     key: "onMessageSubmit",
     value: function onMessageSubmit(newMessage) {
-      var _this2 = this;
-
       var newMsgData = {
         message: newMessage,
         user: this.props.currentUser
       };
       axios(_helpers_axiosHelper__WEBPACK_IMPORTED_MODULE_5__["storeNewMessageConfig"](this.props.token, newMsgData)).then(function (response) {
-        //handle user message submit
-        _this2.setState({
-          messages: response.data.messages
-        });
+        console.log('message succesfully stored', response.data);
       })["catch"](function (error) {
-        console.log(error.response.data);
+        console.log('issues storing message', error.response.data);
+      });
+    }
+  }, {
+    key: "setUsersInLobby",
+    value: function setUsersInLobby(users) {
+      console.log('here there are', users);
+      this.setState(function (prevState) {
+        return {
+          users: [].concat(_toConsumableArray(prevState.users), _toConsumableArray(users))
+        };
+      });
+    }
+  }, {
+    key: "newUserDidJoin",
+    value: function newUserDidJoin(user) {
+      console.log('new join', user);
+      this.setState(function (prevState) {
+        return {
+          users: [].concat(_toConsumableArray(prevState.users), [user])
+        };
+      });
+    }
+  }, {
+    key: "userDidLeave",
+    value: function userDidLeave(user) {
+      console.log('i am leaving... ', user); //to avoid problems change the state only if this is not you
+
+      if (user.id !== this.props.currentUser.id) {
+        this.setState(function (prevState) {
+          return {
+            users: prevState.users.filter(function (u) {
+              return u.id !== user.id;
+            })
+          };
+        });
+      }
+    }
+  }, {
+    key: "userDidType",
+    value: function userDidType(user) {
+      var id = user.id,
+          name = user.name;
+      console.log(name + ' typed ');
+      this.setState(function (prevState) {
+        prevState.users.forEach(function (user, index) {
+          if (user.id === id) {
+            user.typing = true;
+          }
+        }); // console.log(prevState.users);
+
+        return {
+          users: prevState.users
+        };
+      });
+    }
+  }, {
+    key: "messageWasSent",
+    value: function messageWasSent(event) {
+      this.setState(function (prevState) {
+        var newMessage = {
+          message: event.message.message,
+          user: event.user
+        };
+        prevState.users.forEach(function (user, index) {
+          if (user.id === event.user.id) {
+            user.typing = false;
+          }
+        });
+        var newState = {
+          messages: [].concat(_toConsumableArray(prevState.messages), [newMessage]),
+          users: prevState.users
+        };
+        console.log('state after message submit', newState);
+        return newState;
       });
     }
   }, {
@@ -76997,16 +77070,13 @@ function (_Component) {
       var _componentDidMount = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var _this3 = this;
-
-        var _ref2, data;
+        var _ref, data;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                // console.log('da dashboard currentUser ', this.props.currentUser)
-                // console.log('da dashboard token ', this.props.token)
+                //User joins chat lobby and listens to events
                 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_6__["default"]({
                   broadcaster: 'pusher',
                   key: "websocketkey",
@@ -77019,77 +77089,16 @@ function (_Component) {
                     }
                   }
                 });
-                window.Echo.join('chat').here(function (users) {
-                  console.log('here there are', users);
+                window.Echo.join('chat').here(this.setUsersInLobby).joining(this.newUserDidJoin).leaving(this.userDidLeave).listenForWhisper('typing', this.userDidType).listen('MessageSent', this.messageWasSent);
+                console.log('echo operations ok'); //Download messages and update state
 
-                  _this3.setState(function (prevState) {
-                    return {
-                      users: [].concat(_toConsumableArray(prevState.users), _toConsumableArray(users))
-                    };
-                  });
-                }).joining(function (user) {
-                  console.log('new join', user);
-
-                  _this3.setState(function (prevState) {
-                    return {
-                      users: [].concat(_toConsumableArray(prevState.users), [user])
-                    };
-                  });
-                }).leaving(function (user) {
-                  console.log('i am leaving... ', user); //to avoid problems change the state only if this is not you
-
-                  if (user.id !== _this3.props.currentUser.id) {
-                    _this3.setState(function (prevState) {
-                      return {
-                        users: prevState.users.filter(function (u) {
-                          return u.id !== user.id;
-                        })
-                      };
-                    });
-                  }
-                }).listenForWhisper('typing', function (_ref) {
-                  var id = _ref.id,
-                      name = _ref.name;
-                  console.log(name + ' typed ');
-
-                  _this3.setState(function (prevState) {
-                    prevState.users.forEach(function (user, index) {
-                      if (user.id === id) {
-                        user.typing = true;
-                      }
-                    }); // console.log(prevState.users);
-
-                    return {
-                      users: prevState.users
-                    };
-                  });
-                }).listen('MessageSent', function (event) {
-                  _this3.setState(function (prevState) {
-                    var newMessage = {
-                      message: event.message.message,
-                      user: event.user
-                    };
-                    prevState.users.forEach(function (user, index) {
-                      if (user.id === event.user.id) {
-                        user.typing = false;
-                      }
-                    });
-                    var newState = {
-                      messages: [].concat(_toConsumableArray(prevState.messages), [newMessage]),
-                      users: prevState.users
-                    };
-                    console.log('state after message submit', newState);
-                    return newState;
-                  });
-                });
-                console.log('echo actions ok');
                 _context.prev = 3;
                 _context.next = 6;
                 return axios(_helpers_axiosHelper__WEBPACK_IMPORTED_MODULE_5__["getMessagesConfig"](this.props.token));
 
               case 6:
-                _ref2 = _context.sent;
-                data = _ref2.data;
+                _ref = _context.sent;
+                data = _ref.data;
                 console.log('done getMessages call', data);
                 this.setState({
                   messages: data.messages
@@ -77165,90 +77174,54 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+//Refactored to use Hooks
 
 
+var ChatForm = function ChatForm(props) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      newMessage = _useState2[0],
+      setNewMessage = _useState2[1];
 
-var ChatForm =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(ChatForm, _Component);
+  var onNewMessageSubmit = function onNewMessageSubmit(e) {
+    e.preventDefault();
+    props.onMessageSent(setNewMessage);
+    setNewMessage('');
+  };
 
-  function ChatForm(props) {
-    var _this;
+  var handleChange = function handleChange(e) {
+    // console.log('type event!', props.currentUser);
+    Echo.join('chat').whisper('typing', props.currentUser);
+    setNewMessage(e.target.value);
+  };
 
-    _classCallCheck(this, ChatForm);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ChatForm).call(this, props));
-    _this.state = {
-      newMessage: ''
-    };
-    _this.onNewMessageSubmit = _this.onNewMessageSubmit.bind(_assertThisInitialized(_this));
-    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(ChatForm, [{
-    key: "onNewMessageSubmit",
-    value: function onNewMessageSubmit(e) {
-      e.preventDefault();
-      this.props.onMessageSent(this.state.newMessage);
-      this.setState({
-        newMessage: ''
-      });
-    }
-  }, {
-    key: "handleChange",
-    value: function handleChange(e) {
-      console.log('type event!', this.props.currentUser); //Send
-
-      Echo.join('chat').whisper('typing', this.props.currentUser);
-      this.setState(_defineProperty({}, e.target.name, e.target.value));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: this.onNewMessageSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        id: "btn-input",
-        type: "text",
-        name: "newMessage",
-        className: "form-control input-sm",
-        placeholder: "Type your message here...",
-        value: this.state.newMessage,
-        onChange: this.handleChange
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "input-group-btn"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-primary btn-sm",
-        id: "btn-chat"
-      }, "Send"))));
-    }
-  }]);
-
-  return ChatForm;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: onNewMessageSubmit
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "input-group"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    id: "btn-input",
+    type: "text",
+    name: "newMessage",
+    className: "form-control input-sm",
+    placeholder: "Type your message here...",
+    value: newMessage,
+    onChange: handleChange
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: "input-group-btn"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-primary btn-sm",
+    id: "btn-chat"
+  }, "Send"))));
+};
 
 /* harmony default export */ __webpack_exports__["default"] = (ChatForm);
 
