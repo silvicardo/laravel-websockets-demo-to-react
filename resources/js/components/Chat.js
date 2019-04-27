@@ -37,7 +37,7 @@ class Chat extends Component {
     console.log('here there are', users);
 
     this.setState((prevState) => {
-        return { users: [...prevState.users,...users]}
+        return { users: [...prevState.users,...users]};
     });
 
   }
@@ -75,7 +75,6 @@ class Chat extends Component {
               user.typing = true;
           }
       });
-      // console.log(prevState.users);
 
       return { users: prevState.users }
 

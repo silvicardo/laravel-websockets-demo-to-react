@@ -76645,6 +76645,15 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 /**********************/
 
+/*
+The App Component holds the highest level state.
+Manages:
+-> currentUser
+-> userLoginStatus
+-> currentUser token
+-> errors(sent to descendant componenents for feedback)
+*/
+
 var App =
 /*#__PURE__*/
 function (_Component) {
@@ -76655,10 +76664,8 @@ function (_Component) {
 
     _classCallCheck(this, App);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props)); //This is the Highest level state
-
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
     _this.state = {
-      appName: 'Laravel-Passport-Websocket+React',
       isLoggedIn: false,
       currentUser: {},
       token: null,
@@ -76841,7 +76848,7 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Navbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
         isLoggedIn: this.state.isLoggedIn,
         logoutClicked: this.logoutClicked,
-        appName: this.state.appName
+        appName: this.props.appName || 'Laravel WebSockets + React'
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "container py-5"
       }, userFeedback, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
@@ -76883,7 +76890,7 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 /***********************/
 
-/* REACT-DOM -> REN   DER */
+/* REACT-DOM -> RENDER */
 
 /***********************/
 
@@ -76891,7 +76898,9 @@ function (_Component) {
 
 
 if (document.getElementById('app')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(App, null)), document.getElementById('app'));
+  react_dom__WEBPACK_IMPORTED_MODULE_2___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(App, {
+    appName: "Laravel-Passport-Websocket+React"
+  })), document.getElementById('app'));
 }
 
 /***/ }),
@@ -77036,8 +77045,7 @@ function (_Component) {
           if (user.id === id) {
             user.typing = true;
           }
-        }); // console.log(prevState.users);
-
+        });
         return {
           users: prevState.users
         };
@@ -77315,16 +77323,17 @@ __webpack_require__.r(__webpack_exports__);
 
 var ErrorsAlert = function ErrorsAlert(_ref) {
   var errors = _ref.errors;
+  var errorsListItems = errors.map(function (err, index) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: index
+    }, err);
+  });
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "alert alert-warning",
     role: "alert"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
     className: "list-unstyled"
-  }, errors.map(function (err, index) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-      key: index
-    }, err);
-  })));
+  }, errorsListItems));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (ErrorsAlert);

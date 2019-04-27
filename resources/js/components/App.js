@@ -17,20 +17,24 @@ import ErrorsAlert from './ErrorsAlert';
 //Helpers
 import * as axiosHelper from './helpers/axiosHelper';
 
-
 /**********************/
 /* MAIN APP COMPONENT */
 /**********************/
+/*
+The App Component holds the highest level state.
+Manages:
+-> currentUser
+-> userLoginStatus
+-> currentUser token
+-> errors(sent to descendant componenents for feedback)
+*/
 
 export default class App extends Component {
 
   constructor(props){
     super(props);
 
-    //This is the Highest level state
-
     this.state = {
-      appName: 'Laravel-Passport-Websocket+React',
       isLoggedIn: false,
       currentUser: {},
       token: null,
@@ -132,25 +136,26 @@ export default class App extends Component {
 
     return(
       <Fragment>
+        {/* NavBar receives appName from props, , loginStatus from State and logout function */}
         <Navbar
         isLoggedIn={this.state.isLoggedIn}
         logoutClicked={this.logoutClicked}
-        appName={this.state.appName}
+        appName={this.props.appName || 'Laravel WebSockets + React'}
         />
         <div className="container py-5">
           {userFeedback}
         <Switch>
-          {/* HomePage receives the entireState to show user info */}
+          {/* HomePage receives the entireState to show user info(isLoggedIn, token) */}
           <Route
           exact path="/"
-          render={(props) =><HomePage {...this.state}/>}
+          render={(props) => (<HomePage {...this.state}/>)}
           />
-          {/* LoginPage receives props to manage routing */}
+          {/* LoginPage receives props to manage routing and login function */}
           <Route
           exact path="/login"
           render={(props) => (<LoginPage onLogin={this.loginClicked} {...props} />)}
           />
-          {/* RegisterPage receives props to manage routing */}
+          {/* RegisterPage receives props to manage routing and register function */}
           <Route
           exact path="/register"
           render={(props) => (<RegisterPage onRegister={this.registrationSubmit} {...props}/>)}
@@ -170,13 +175,13 @@ export default class App extends Component {
 }
 
 /***********************/
-/* REACT-DOM -> REN   DER */
+/* REACT-DOM -> RENDER */
 /***********************/
 
 if (document.getElementById('app')) {
     ReactDOM.render(
       <Router>
-          <App />
+          <App appName="Laravel-Passport-Websocket+React" />
       </Router>
       , document.getElementById('app'));
 }
