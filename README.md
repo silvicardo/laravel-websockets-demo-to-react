@@ -9,15 +9,30 @@ Also look out for the [official documentation](https://docs.beyondco.de/laravel-
 
 ## Usage
 
-1. Clone this repository
-2. `composer install`
-3. `cp .env.example .env`
-4. `php artisan migrate`
-5. `npm install`
-6. `npm run dev`
-7. `php artisan key:generate`
-8. `php artisan websockets:serve`
-9. `Open two different browsers and test the app registering with different accounts`
+Remember
+
+  -> complete your .env with your db credentials
+  -> Open two different browsers to test the app registering with different accounts
+
+Notes
+
+  -> php artisan make:auth should not be necessary
+
+```bash
+git clone https://github.com/silvicardo/laravel-websockets-demo-to-react.git
+cd laravel-websockets-demo-to-react
+composer install
+cp .env.example .env
+composer require laravel/passport
+#php artisan make:auth
+php artisan migrate
+php artisan passport:install
+npm install
+npm run dev
+php artisan key:generate
+php artisan websockets:serve
+php artisan serve
+```
 
 ## Credits
 

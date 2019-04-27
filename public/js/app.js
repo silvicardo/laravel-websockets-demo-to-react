@@ -77194,6 +77194,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var ChatForm = function ChatForm(props) {
+  //Handling state with the useState Hook -> [state, function to changeState]
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       newMessage = _useState2[0],
@@ -77295,7 +77296,9 @@ var DashboardPage = function DashboardPage(props) {
 
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "jumbotron"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome ", props.user.name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Enjoy your stay"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome ", props.user.name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "text-center"
+  }, "Enjoy your stay"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-secondary btn-lg",
     onClick: backToHomepage
   }, "Go Back to the Homepage "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Chat__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -77355,16 +77358,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var HomePage = function HomePage(props) {
-  console.log('HomePage state', props); //If the user is loggedIn provide a welcome alert
+var HomePage = function HomePage(_ref) {
+  var isLoggedIn = _ref.isLoggedIn,
+      currentUser = _ref.currentUser,
+      token = _ref.token;
+  console.log('HomePage props', {
+    isLoggedIn: isLoggedIn,
+    currentUser: currentUser,
+    token: token
+  }); //If the user is loggedIn provide a welcome alert
 
   var userFeedback;
 
-  if (props.isLoggedIn) {
+  if (isLoggedIn) {
     userFeedback = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "alert alert-success",
       role: "alert"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "You are currently logged in as ", props.currentUser.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "You have a token to \"track your session\""));
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "You are currently logged in as ", currentUser.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "You have a token to \"track your session\""));
   } else {
     //if not invite him to do so
     userFeedback = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

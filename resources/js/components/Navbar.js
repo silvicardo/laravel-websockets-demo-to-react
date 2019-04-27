@@ -31,14 +31,14 @@ const Navbar = (props) => {
         <NavLink className="nav-item nav-link" to="/register">Register</NavLink>
         <NavLink className="nav-item nav-link" to="/login">Login</NavLink>
       </Fragment>
-    )
+    );
   } else {//LOGGED IN
     authLinks = (
       <Fragment>
         <NavLink className="nav-item nav-link" to="/Dashboard">Dashboard</NavLink>
         <button className="ml-5 btn btn-danger" onClick={logoutBtnClicked}>Logout</button>
       </Fragment>
-    )
+    );
   }
 
   return (

@@ -9,6 +9,7 @@ const DashboardPage = (props) => {
     window.Echo && window.Echo.leave('chat') || null;
 
     props.history.push('/');
+
   }
 
   return (
@@ -16,10 +17,12 @@ const DashboardPage = (props) => {
         <div className="jumbotron">
           <h1>Welcome {props.user.name}</h1>
         </div>
-        <p>Enjoy your stay</p>
+        <p className="text-center">Enjoy your stay</p>
         <button className="btn btn-secondary btn-lg" onClick={backToHomepage}>Go Back to the Homepage </button>
         <Chat currentUser={props.user} token={props.token} />
       </Fragment>
     );
+
 }
+
 export default DashboardPage;

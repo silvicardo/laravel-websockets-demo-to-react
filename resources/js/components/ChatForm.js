@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 const ChatForm = (props) => {
 
+  //Handling state with the useState Hook -> [state, function to changeState]
   const [newMessage, setNewMessage] = useState('');
 
   const onNewMessageSubmit = (e) => {

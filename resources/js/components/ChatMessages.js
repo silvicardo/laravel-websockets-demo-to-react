@@ -7,15 +7,15 @@ const ChatMessages = ({messages}) => {
           <div className="chat-body clearfix">
               <div className="header">
                   <strong className="primary-font">
-                      { message.user.name }
+                      {message.user.name}
                   </strong>
               </div>
               <p>
-                  { message.message }
+                  {message.message}
               </p>
           </div>
       </li>
-    ))
+    ));
 
     return (
       <ul className="chat">
@@ -23,6 +23,6 @@ const ChatMessages = ({messages}) => {
       </ul>
     );
 
-  }
+}
 
 export default ChatMessages;

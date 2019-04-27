@@ -40,7 +40,8 @@ export function getLogoutConfig(token){
 export function getMessagesConfig(token){
 
   console.log('token from helper', token);
-    //assemble the Axios Config with token
+
+  //assemble the Axios Config with token
   return {
     url: '/api/messages',
     method: 'get',

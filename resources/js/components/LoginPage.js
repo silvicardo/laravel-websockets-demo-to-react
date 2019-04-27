@@ -4,6 +4,7 @@ import ErrorsAlert from './ErrorsAlert';
 class LoginPage extends Component {
 
 constructor(props){
+
   super(props);
 
   this.state = {
@@ -57,7 +58,7 @@ render() {
 
   if (errors.length !== 0) {
 
-    userFeedback = (<ErrorsAlert {...this.state} />)
+    userFeedback = (<ErrorsAlert {...this.state} />);
 
   }
 
