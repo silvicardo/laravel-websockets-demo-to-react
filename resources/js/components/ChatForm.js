@@ -9,7 +9,7 @@ const ChatForm = (props) => {
 
     e.preventDefault();
 
-    props.onMessageSent(setNewMessage);
+    props.onMessageSent(newMessage);
 
     setNewMessage('');
 
@@ -18,7 +18,7 @@ const ChatForm = (props) => {
   const handleChange = (e) => {
 
     // console.log('type event!', props.currentUser);
-    
+
     Echo.join('chat').whisper('typing', props.currentUser);
 
     setNewMessage(e.target.value);

@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class ChatMessages extends Component {
-  render() {
+const ChatMessages = ({messages}) => {
 
-    const {messages} = this.props;
-
-    const messagesLis = messages.map((message, idx) => (
+    const messagesListItems = messages.map((message, idx) => (
       <li key={idx} className="left clearfix">
           <div className="chat-body clearfix">
               <div className="header">
@@ -22,10 +19,10 @@ class ChatMessages extends Component {
 
     return (
       <ul className="chat">
-        {messagesLis}
+        {messagesListItems}
       </ul>
     );
+
   }
-}
 
 export default ChatMessages;
