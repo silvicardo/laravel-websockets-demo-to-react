@@ -1,6 +1,6 @@
-# Laravel WebSockets Demo To React 🛰
+# Laravel WebSockets Demo To React + Redux 🛰
 
-React implementation of the official [Laravel WebSockets Demo](https://github.com/beyondcode/laravel-websockets-demo)
+React + Redux implementation of the official [Laravel WebSockets Demo](https://github.com/beyondcode/laravel-websockets-demo)
 
 
 Check out the [Laravel WebSockets](https://github.com/beyondcode/laravel-websockets) package!
