@@ -77198,7 +77198,7 @@ var ChatForm = function ChatForm(props) {
   };
 
   var handleChange = function handleChange(e) {
-    // console.log('type event!', props.currentUser);
+    console.log('type event!', props.currentUser.name);
     Echo.join('chat').whisper('typing', props.currentUser);
     setNewMessage(e.target.value);
   };
@@ -77526,112 +77526,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
  //withRouter gives us the ability to navigate
 //even if the component is not within a Route
 
 
 
 
-var Navbar =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Navbar, _Component);
+var Navbar = function Navbar(props) {
+  var backToTheHomePage = function backToTheHomePage() {
+    //leave the chat if an Echo instance is available
+    window.Echo && window.Echo.leave('chat') || null; //and back to Homepage
 
-  function Navbar(props) {
-    var _this;
+    props.history.push('/');
+  };
 
-    _classCallCheck(this, Navbar);
+  var logoutBtnClicked = function logoutBtnClicked() {
+    //Perform Logout and then reach the homeepage anyway (success, fail)
+    props.logoutClicked(backToTheHomePage, backToTheHomePage);
+  }; //SHOW LINKS based on userLogin status
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Navbar).call(this, props));
-    _this.logoutBtnClicked = _this.logoutBtnClicked.bind(_assertThisInitialized(_this));
-    _this.backToTheHomePage = _this.backToTheHomePage.bind(_assertThisInitialized(_this));
-    return _this;
+
+  var authLinks;
+
+  if (!props.isLoggedIn) {
+    //NOT LOGGED IN
+    authLinks = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
+      className: "nav-item nav-link",
+      to: "/register"
+    }, "Register"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
+      className: "nav-item nav-link",
+      to: "/login"
+    }, "Login"));
+  } else {
+    //LOGGED IN
+    authLinks = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
+      className: "nav-item nav-link",
+      to: "/Dashboard"
+    }, "Dashboard"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      className: "ml-5 btn btn-danger",
+      onClick: logoutBtnClicked
+    }, "Logout"));
   }
 
-  _createClass(Navbar, [{
-    key: "backToTheHomePage",
-    value: function backToTheHomePage() {
-      //leave the chat if an Echo instance is available
-      window.Echo && window.Echo.leave('chat') || null; //and back to Homepage
-
-      this.props.history.push('/');
-    }
-  }, {
-    key: "logoutBtnClicked",
-    value: function logoutBtnClicked() {
-      //Perform Logout and then reach the homeepage anyway (success, fail)
-      this.props.logoutClicked(this.backToTheHomePage, this.backToTheHomePage);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      //SHOW LINKS based on userLogin status
-      var authLinks;
-
-      if (!this.props.isLoggedIn) {
-        //NOT LOGGED IN
-        authLinks = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
-          className: "nav-item nav-link",
-          to: "/register"
-        }, "Register"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
-          className: "nav-item nav-link",
-          to: "/login"
-        }, "Login"));
-      } else {
-        //LOGGED IN
-        authLinks = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
-          className: "nav-item nav-link",
-          to: "/Dashboard"
-        }, "Dashboard"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "ml-5 btn btn-danger",
-          onClick: this.logoutBtnClicked
-        }, "Logout"));
-      }
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-        className: "navbar navbar-expand-lg navbar-dark bg-dark"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
-        className: "navbar-brand",
-        to: "/"
-      }, this.props.appName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "navbar-toggler",
-        type: "button",
-        "data-toggle": "collapse",
-        "data-target": "#navbarNavAltMarkup",
-        "aria-controls": "navbarNavAltMarkup",
-        "aria-expanded": "false",
-        "aria-label": "Toggle navigation"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "navbar-toggler-icon"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "collapse navbar-collapse",
-        id: "navbarNavAltMarkup"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "navbar-nav"
-      }, authLinks)));
-    }
-  }]);
-
-  return Navbar;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); //passes match, history, location to Component
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
+    className: "navbar navbar-expand-lg navbar-dark bg-dark"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
+    className: "navbar-brand",
+    to: "/"
+  }, props.appName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "navbar-toggler",
+    type: "button",
+    "data-toggle": "collapse",
+    "data-target": "#navbarNavAltMarkup",
+    "aria-controls": "navbarNavAltMarkup",
+    "aria-expanded": "false",
+    "aria-label": "Toggle navigation"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: "navbar-toggler-icon"
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "collapse navbar-collapse",
+    id: "navbarNavAltMarkup"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "navbar-nav"
+  }, authLinks)));
+}; //passes match, history, location to Component
 
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["withRouter"])(Navbar));

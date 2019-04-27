@@ -17,7 +17,7 @@ const ChatForm = (props) => {
 
   const handleChange = (e) => {
 
-    // console.log('type event!', props.currentUser);
+    console.log('type event!', props.currentUser.name);
 
     Echo.join('chat').whisper('typing', props.currentUser);
 
